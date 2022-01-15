@@ -21,9 +21,9 @@ def cabecalho(titulo=''):
     :param txt: Texto do cabeçalho
     :return: Sem retorno
     """
-    print('-' * 40)
-    print(titulo.center(40))
-    print('-' * 40)
+    print('-' * 50)
+    print(titulo.center(50))
+    print('-' * 50)
 
 
 def menu(lista, cor1='\033[m', cor2='\033[m', titulo='Menu', retorna='int'):
@@ -49,12 +49,12 @@ def menu(lista, cor1='\033[m', cor2='\033[m', titulo='Menu', retorna='int'):
     Escolhendo stint, ele reornaria tanto 1,2,3 tanto opção 1, opção 2, opção 3 os dois tipos
     em uma lista.
     """
-    print('-' * 40)
+    print('-' * 50)
     print(f'{titulo:^40}')
-    print('-' * 40)
+    print('-' * 50)
     for c, item in enumerate(lista):
         print(f'{cor1}{c + 1} - {cor2}{item}\033[m')
-    print('-' * 40)
+    print('-' * 50)
     while True:
         try:
             opc = int(input(f'{cor1}Opção:\033[m '))
