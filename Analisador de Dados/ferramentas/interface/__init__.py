@@ -50,7 +50,7 @@ def menu(lista, cor1='\033[m', cor2='\033[m', titulo='Menu', retorna='int'):
     em uma lista.
     """
     print('-' * 50)
-    print(f'{titulo:^40}')
+    print(f'{titulo:^50}')
     print('-' * 50)
     for c, item in enumerate(lista):
         print(f'{cor1}{c + 1} - {cor2}{item}\033[m')

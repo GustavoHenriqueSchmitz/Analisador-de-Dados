@@ -56,6 +56,9 @@ while True:
                     print(f"""O arquivo: {arquivo}\né do tipo {extensao} e não {tipo}, como definido anteriormente.\n{interface.linha(40)}""")
                     rtipo = str(input(f'Deseja abrir o arquivo como {extensao}[s/n]? ')).lower().strip()
 
+                except:
+                    print('Houve algum erro, ao abrir  tabela.')
+
                     if rtipo == 's':
                         tipo = extensao.replace('.', '')
                         pdcd = f'read_{tipo}'
@@ -79,13 +82,52 @@ while True:
                     quebra_while -= 1
                     break
 
-                op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Tratamento de dados', 'Análise Inicial', 'Analise Detalhada', 'Exportar Tabela', 'Exportar Gráficos', 'Importar outra tabela', 'Configurações', 'Ajuda', 'Finalizar Programa'])
+                op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Tratamento de dados', 'Análise', 'Exportar Tabela', 'Exportar Gráficos', 'Importar outra tabela', 'Configurações', 'Ajuda', 'Finalizar Programa'])
                 interface.linha(50)
                 if op == 1:
                     display(tabela)
 
                 elif op == 2:
                     display(tabela.info())
+
+                elif op == 3:
+                    while True:
+                        op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Apagar coluna', 'Apagar linha', 'Mudar Dtype de uma coluna', 'Voltar ao menu'], titulo='Tratamento de Dados')
+
+                        if op == 1:
+                            display(tabela)
+
+                        elif op == 2:
+                            display(tabela.info())
+
+                        elif op == 3:
+
+                            while True:
+                                op = interface.menu(['Apagar coluna', 'Apagar colunas, com qualquer valor vazio', 'Apagar colunas, com todos os valores vazios', 'Voltar'], titulo='Apagar Coluna')
+
+                                if op == 1:
+                                    while True:
+
+                                        try:
+                                            interface.linha(50)
+                                            nome_coluna = str(input('Digite o nome da coluna a ser apagada: '))
+                                            tabela = tabela.drop(nome_coluna, axis=1)
+
+                                        except KeyError:
+                                            print('A coluna digitada, não existe.')
+                                            continue
+
+                                        except:
+                                            print('Houve algum erro, ao apagar a coluna.')
+
+                                        else:
+                                            break
+
+                                elif op == 6:
+                                    break
+
+                        elif op == 6:
+                            break
 
                 elif op == 8:
                     quebra_while = 1
