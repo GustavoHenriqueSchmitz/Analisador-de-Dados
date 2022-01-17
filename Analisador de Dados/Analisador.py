@@ -1,31 +1,51 @@
+#Módulos/Bibliotecas Utilizados
 from ferramentas import interface
 from ferramentas import cores
 import pandas as pd
 from IPython.display import display
 from os.path import splitext
+from ferramentas import leia
 
+#Quantia de loopings while, a serem quebrados. A utilidade desa variavel, é quebrar mais de 1 looping while de uma vez.
 quebra_while = 0
 
+#Ínicio do programa
 while True:
 
+    #Verifica se o looping while atual, deve ser quebrado em sequência de outro.
     if quebra_while > 0:
         quebra_while -= 1
         break
 
+#Pequena introdução.
     interface.cabecalho('Analisador de Dados')
-    print(f"""|Para começar sua analise.
+    print(f"""|Para começar sua analise,
 |vamos definir o tipo da tabela.
 |Ex: Excel, csv.
-|E após isso importa-la.""")
+|E após isso, importa-la.""")
     interface.linha(50)
+    #Parte ínicial do programa, onde importamos a tabela.
     while True:
 
+        # Verifica se o looping while atual, deve ser quebrado em sequência de outro.
         if quebra_while > 0:
             quebra_while -= 1
             break
 
+        #Começando, definindo o tipo da tabela.
         try:
+            print('Digite [esc], para cancelar.\nOBS: Optar por cancelar nessa opção, é o mesmo que finalizar o programa.')
+            interface.linha(50)
             tipo = str(input('Tipo de tabela: ')).lower().strip()
+
+            #Permite o usuário cancelar a etapa.
+            if tipo == 'esc':
+                print('Finalizando Programa')
+                quebra_while = 1
+                break
+
+            #De acordo com o tipo de tabela, definido pelo usuário.
+            #Ele monta o comando.
             interface.linha(50)
             pdcd = f'read_{tipo}'
             pdcd = getattr(pd, pdcd)
@@ -36,108 +56,159 @@ while True:
 
         else:
 
+            #inicia a segunda parte da importação.
             while True:
 
+                # Verifica se o looping while atual, deve ser quebrado em sequência de outro.
                 if quebra_while > 0:
                     quebra_while -= 1
                     break
 
+                #Localizando a tabela a ser aberta.
                 try:
+                    print('Digite [esc], para cancelar.')
+                    interface.linha(50)
                     tabela = str(input('Tabela a ser analisada: '))
+
+                    # Permite o usuário cancelar a etapa.
+                    if tabela.lower() == 'esc':
+                        break
+
+                    #Abre a tabela
                     interface.linha(50)
                     tabela = pdcd(tabela)
 
+                #Verifica os erros.
                 except FileNotFoundError:
                     print('O arquivo especificado, não foi encontrado.')
+                    interface.linha(50)
                     continue
 
+                #Em caso de o erro encontrado.
+                #Ser o tipo definido pelo usuário, ser diferente do tipo da tabela definida pelo usuário.
+                #Ele da a opção de corrigir.
                 except ValueError:
                     arquivo, extensao = splitext(f'{tabela}')
-                    print(f"""O arquivo: {arquivo}\né do tipo {extensao} e não {tipo}, como definido anteriormente.\n{interface.linha(40)}""")
-                    rtipo = str(input(f'Deseja abrir o arquivo como {extensao}[s/n]? ')).lower().strip()
+                    print(f"""O arquivo: {arquivo}\nÉ do tipo {extensao}, e não {tipo}, como definido anteriormente.""")
+                    interface.linha(50)
+                    rtipo = leia.leiarespostaSN(f'Deseja abrir o arquivo como {extensao}[s/n]? ', 'min')
 
-                except:
-                    print('Houve algum erro, ao abrir  tabela.')
-
+                    #Se o usuário aceitar a correção, o programa abrirá a tabela, com seu tipo original.
                     if rtipo == 's':
                         tipo = extensao.replace('.', '')
                         pdcd = f'read_{tipo}'
                         pdcd = getattr(pd, pdcd)
                         tabela = pdcd(tabela)
-                        break
 
+                    #Em caso do usuário negar, não será possível abrir a tabela. Então, ele reseta a importação.
                     elif rtipo == 'n':
-                        quebra_while += 1
                         break
 
-                else:
-                    break
+                except:
+                    print('Houve algum erro, ao abrir tabela.')
+                    continue
 
-            interface.linha(50)
-            display(tabela)
-            interface.linha(50)
-            while True:
-
-                if quebra_while > 0:
-                    quebra_while -= 1
-                    break
-
-                op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Tratamento de dados', 'Análise', 'Exportar Tabela', 'Exportar Gráficos', 'Importar outra tabela', 'Configurações', 'Ajuda', 'Finalizar Programa'])
+                #Após tudo, ele abre a tabela escolhida para visualização.
                 interface.linha(50)
-                if op == 1:
-                    display(tabela)
+                display(tabela)
+                interface.linha(50)
+                #Em seguida abrindo o menu de Análise da tabela.
+                while True:
 
-                elif op == 2:
-                    display(tabela.info())
+                    # Verifica se o looping while atual, deve ser quebrado em sequência de outro.
+                    if quebra_while > 0:
+                        quebra_while -= 1
+                        break
 
-                elif op == 3:
-                    while True:
-                        op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Apagar coluna', 'Apagar linha', 'Mudar Dtype de uma coluna', 'Voltar ao menu'], titulo='Tratamento de Dados')
+                    #Menu de análise
+                    op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Tratamento de dados', 'Análise', 'Exportar Tabela', 'Exportar Gráficos', 'Importar outra tabela', 'Configurações', 'Ajuda', 'Finalizar Programa'])
+                    interface.linha(50)
 
-                        if op == 1:
-                            display(tabela)
+                    #Opção 1, para mostrar a tabela.
+                    if op == 1:
+                        display(tabela)
 
-                        elif op == 2:
-                            display(tabela.info())
+                    #Opção 2, para visualizar informações da tabela.
+                    elif op == 2:
+                        display(tabela.info())
 
-                        elif op == 3:
+                    #Opção 3, cujo objetivo, é tratar os dados da tabela
+                    elif op == 3:
+                        #Menu de tratamento de dados
+                        while True:
+                            op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Apagar coluna', 'Apagar linha', 'Mudar Dtype de uma coluna', 'Voltar ao menu'], titulo='Tratamento de Dados')
 
-                            while True:
-                                op = interface.menu(['Apagar coluna', 'Apagar colunas, com qualquer valor vazio', 'Apagar colunas, com todos os valores vazios', 'Voltar'], titulo='Apagar Coluna')
+                            #Opção 1, para mostrar a tabela.
+                            if op == 1:
+                                display(tabela)
 
-                                if op == 1:
-                                    while True:
+                            #Opção2, para visualizar informações da tabela
+                            elif op == 2:
+                                display(tabela.info())
+
+                            #Opção 3, apagar colunas.
+                            elif op == 3:
+
+                                while True:
+                                    op = interface.menu(['Apagar coluna', 'Apagar colunas, com qualquer valor vazio', 'Apagar colunas, com todos os valores vazios', 'Voltar'], titulo='Apagar Coluna')
+
+                                    #Opção 1, permite apagar uma coluna específica
+                                    if op == 1:
+
+                                            try:
+                                                interface.linha(50)
+                                                print('Digite [esc], para cancelar.')
+                                                interface.linha(50)
+                                                nome_coluna = str(input('Digite o nome da coluna a ser apagada: '))
+
+                                                # Permite o usuário cancelar a etapa.
+                                                if nome_coluna.lower() == 'esc':
+                                                    continue
+
+                                                tabela = tabela.drop(nome_coluna, axis=1)
+
+                                            except KeyError:
+                                                print('A coluna digitada, não existe.')
+                                                continue
+
+                                            except:
+                                                print('Houve algum erro, ao apagar a coluna.')
+
+                                            else:
+                                                break
+
+                                    #Opção 2, exclui colunas, com qualquer valor vazio.
+                                    elif op == 2:
 
                                         try:
-                                            interface.linha(50)
-                                            nome_coluna = str(input('Digite o nome da coluna a ser apagada: '))
-                                            tabela = tabela.drop(nome_coluna, axis=1)
-
-                                        except KeyError:
-                                            print('A coluna digitada, não existe.')
-                                            continue
+                                            tabela = tabela.dropna(how='any', axis=1)
 
                                         except:
-                                            print('Houve algum erro, ao apagar a coluna.')
+                                            print('Ouve um erro, ao apagar as colunas.')
+                                            continue
 
-                                        else:
-                                            break
+                                    #Opção 3, exclui colunas, com todos os seus valores vazios.
+                                    elif op == 3:
 
-                                elif op == 6:
-                                    break
+                                        try:
+                                            tabela = tabela.dropna(how='all', axis=1)
 
-                        elif op == 6:
-                            break
+                                        except:
+                                            print('Ouve um erro, ao apagar as colunas.')
+                                            continue
 
-                elif op == 8:
-                    quebra_while = 1
-                    continue
+                                    #opção 4, Volta ao menu anterior.
+                                    elif op == 4:
+                                        break
+                            #Opção 6, Volta ao menu principal.
+                            elif op == 6:
+                                break
 
-                elif op == 11:
-                    quebra_while = 4
-                    print('Finalizando o Programa!')
-                    continue
+                    #Fecha o programa
+                    elif op == 10:
+                        print('Finalizando o Programa!')
+                        exit()
 
-                else:
-                    print(f'{cores.vermelho()}Em desenvolvimento.{cores.retirarcor()}')
-                    continue
+                    else:
+                        print(f'{cores.vermelho()}Em desenvolvimento.{cores.retirarcor()}')
+                        continue

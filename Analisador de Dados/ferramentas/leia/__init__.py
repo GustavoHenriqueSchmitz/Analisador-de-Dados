@@ -107,7 +107,7 @@ def leiaresposta(txt='', numresp=1):
             else:
                 return resp
 
-def leiarespostaSN(txt='', minmai='mai'):
+def leiarespostaSN(txtinput='', minmai='mai'):
     """
 
     :param txt: Texto a ser mostrado no input
@@ -115,18 +115,18 @@ def leiarespostaSN(txt='', minmai='mai'):
     :return: Retorna um valor S (SIM) ou N (NÃO)
     """
     while True:
-        r = str(input(txt))
+        r = str(input(txtinput))
         if minmai == 'mai':
             if r not in 'S' and r not in 's' and r not in 'n' and r not in 'N':
                 print('\033[31mERRO! Digite um valor valído [S/N]..\033[m')
                 continue
-            r = r.upper()
+            r = r.upper().strip()
             if r == 'S' or 'N':
                 return r
         if minmai == 'min':
-            if r not in 'S' or r not in 's' or r not in 'n' or r not in 'N':
-                print('\033[31mERRO! Digite um valor valído [S/N]..\033[m')
+            if r not in 'S' and r not in 's' and r not in 'n' and r not in 'N':
+                print('\033[31mDigite um valor valido [S/N]..\033[m')
                 continue
-            r = r.lower()
+            r = r.lower().strip()
             if r == 's' or 'n':
                 return r
