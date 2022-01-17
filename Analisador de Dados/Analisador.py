@@ -137,7 +137,7 @@ while True:
 
                         #Menu de tratamento de dados
                         while True:
-                            op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Apagar coluna', 'Apagar linha', 'Mudar Dtype de uma coluna', 'Voltar ao menu'], titulo='Tratamento de Dados')
+                            op = interface.menu(['Ver tabela', 'Ver informações da tabela', 'Apagar coluna', 'Apagar linha', 'Mudar Dtype de uma coluna -> int/float', 'Voltar ao menu'], titulo='Tratamento de Dados')
 
                             #Opção 1, para mostrar a tabela.
                             if op == 1:
@@ -176,7 +176,7 @@ while True:
                                                 print('Houve algum erro, ao apagar a coluna.')
 
                                             else:
-                                                break
+                                                continue
 
                                     #Opção 2, exclui colunas, com qualquer valor vazio.
                                     elif op == 2:
@@ -209,6 +209,7 @@ while True:
                                 while True:
                                     op = interface.menu(['Apagar linha', 'Apagar linhas, com qualquer valor vazio', 'Apagar linhas, com todos os valores vazios', 'Voltar'], titulo='Apagar Linhas')
 
+                                    #Permite o usuário apagar uma linha especifíca.
                                     if op == 1:
                                         try:
                                             interface.linha(50)
@@ -230,7 +231,7 @@ while True:
                                             print('Houve algum erro, ao apagar a linha.')
 
                                         else:
-                                            break
+                                            continue
 
                                     # Opção 2, exclui linhas, com qualquer valor vazio.
                                     elif op == 2:
@@ -254,6 +255,24 @@ while True:
 
                                     elif op == 4:
                                         break
+                            #Permite o usuário, mudar o Dtype de uma coluna, para númérico.
+                            elif op == 5:
+
+                                try:
+                                    print('Digite [esc], para cancelar.')
+                                    coluna = str(input('Digite o nome da coluna: '))
+
+                                    if coluna == 'esc':
+                                        continue
+
+                                    tabela[coluna] = pd.to_numeric(tabela[coluna], errors="coerce")
+
+                                except KeyError:
+                                    print('A coluna digitada, não existe.')
+                                    continue
+
+                                except:
+                                    print('Ouve um erro, ao mudar o Dtype.')
 
                             #Opção 6, Volta ao menu principal.
                             elif op == 6:
