@@ -5,6 +5,7 @@ import pandas as pd
 from IPython.display import display
 from os.path import splitext
 from ferramentas import leia
+import plotly.express as px
 
 #Quantia de loopings while, a serem quebrados. A utilidade desa variavel, é quebrar mais de 1 looping while de uma vez.
 quebra_while = 0
@@ -19,10 +20,10 @@ while True:
 
 #Pequena introdução.
     interface.cabecalho('Analisador de Dados')
-    print(f"""|Para começar sua analise,
-|vamos definir o tipo da tabela.
-|Ex: Excel, csv.
-|E após isso, importa-la.""")
+    print(f"""| Para começar sua analise,        |
+| vamos definir o tipo da tabela.  |
+| Ex: Excel, csv.                  |
+| E após isso, importa-la.         |""")
     interface.linha(50)
     #Parte ínicial do programa, onde importamos a tabela.
     while True:
@@ -278,6 +279,82 @@ while True:
                             elif op == 6:
                                 break
 
+                    elif op == 4:
+
+                        while True:
+                            op = interface.menu(['Análise Gráfica', 'Análise Informativa'], titulo="Análise")
+
+                            if op == 1:
+                                tipo_grafico = 'histogram'
+                                cores_grafico = 'padrao'
+                                tipo_analise = 'None'
+                                coluna1 = 'None'
+                                coluna2 = 'None'
+                                while True:
+                                    op = interface.menu(['Executar análise', 'Visualizar gráficos', 'Visualizar Configurações', 'Configurar análise', 'Voltar'], titulo="Análise Gráfica")
+
+                                    if op == 1:
+                                        pass
+
+                                    elif op == 3:
+                                        interface.linha(50)
+                                        print(f'Tipo_Gráfico = {tipo_grafico}')
+                                        #print(f'Cores = {cores_grafico}') #Arrumar
+                                        print(f'Tipo_Análise = {tipo_analise}')
+                                        print(f'Coluna 1 = {coluna1}')
+                                        print(f'Coluna 2 = {coluna2}')
+
+                                    elif op == 4:
+                                        while True:
+                                            op = interface.menu(['Tipo_Gráfico', 'Cores', 'Tipo_Análise', 'Coluna 1', 'Coluna 2', 'Terminar de Configurar'], titulo="Configurações")
+
+                                            if op == 1:
+                                                op = interface.menu(['Histogram', 'Line', 'Area', 'Bar', 'Timeline', 'ecdf', 'strip', 'pie', 'parallel_coordinates', 'Terminar de configurar'], titulo="Tipo_Gráfico", retorna='str')
+                                                tipo_grafico = op
+
+                                            elif op == 2:
+                                                interface.opcoes(['Padrão', 'Vermelho', 'Amarelo', 'Azul', 'Laranja', 'Verde', 'Roxo', 'Marrom', 'Preto', 'Terminar de configurar'], titulo="Cores")
+                                                cont = 0
+                                                while True:
+                                                    cont += 1
+                                                    interface.linha(50)
+                                                    print(f' -> Cor {cont}')
+                                                    op = interface.menu(['padrao', 'vermelho', 'amarelo', 'azul', 'laranja', 'verde', 'roxo','marrom', 'preto', 'terminar de configurar'], mostrar_op='False', titulo="Cores", retorna="stint")
+
+                                                    if op[0] == 10:
+                                                        break
+
+                                                    elif op[0] == 1:
+                                                        cores_grafico = 'padrao'
+                                                        print('Definido como Padrão')
+                                                        break
+
+                                                    if cont == 1:
+                                                        cores_grafico = []
+
+                                                    print(cores_grafico)
+                                                    op = cores.tradutor_de_cores(op[1])
+                                                    cores_grafico.append(op)
+
+                                            elif op == 3:
+                                                interface.opcoes(['Gráfico único -> Compara a coluna 1, com a coluna 2.', 'Toda a tabela -> Compara a coluna 1, com todas as colunas da tabela.'], titulo="Tipo da Análise")
+                                                op = interface.menu(['grafico unico', 'toda a tabela'], mostrar_op=False, retorna="str")
+                                                tipo_analise = op
+
+                                            elif op == 4:
+                                                coluna1 = str(input('Coluna 1: '))
+
+                                            elif op == 5:
+                                                coluna2 = str(input('Coluna 2: '))
+
+                                            elif op == 6:
+                                                break
+
+
+                                    elif op == 5:
+                                        break
+
+
                     #A opção 6, restaura o estado da tabela
                     elif op == 6:
                         try:
@@ -291,5 +368,5 @@ while True:
                         exit()
 
                     else:
-                        print(f'{cores.vermelho()}Em desenvolvimento.{cores.retirarcor()}')
+                        print(f'{cores.cores.vermelho()}Em desenvolvimento.{cores.cores.retirarcor()}')
                         continue
